@@ -1,23 +1,35 @@
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-light: #eef2ff;
-  --secondary: #06b6d4;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-  --card-bg: rgba(255, 255, 255, 0.96);
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --border-focus: #6366f1;
-  --error: #ef4444;
-  --error-bg: #fef2f2;
+  /* Paleta Rosa y Violeta */
+  --violet-primary: #7c3aed;
+  --violet-hover: #6d28d9;
+  --violet-light: #f5f3ff;
+  --violet-border: #ddd6fe;
+
+  --pink-primary: #ec4899;
+  --pink-hover: #db2777;
+  --pink-light: #fdf2f8;
+  --pink-border: #fbcfe8;
+
+  --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  --bg-gradient: linear-gradient(135deg, #18092a 0%, #290a38 50%, #150624 100%);
+  
+  --card-bg: rgba(255, 255, 255, 0.97);
+  --text-main: #1f1d2b;
+  --text-muted: #6b647d;
+  --border-color: #e9e5f0;
+  --border-focus: #c084fc;
+  
+  --error: #f43f5e;
+  --error-bg: #fff1f2;
   --success: #10b981;
-  --radius-lg: 16px;
-  --radius-md: 10px;
-  --radius-sm: 6px;
-  --shadow-card: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
-  --shadow-btn: 0 4px 12px rgba(79, 70, 229, 0.35);
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 25px 40px -10px rgba(41, 10, 56, 0.45), 0 10px 20px -5px rgba(139, 92, 246, 0.2);
+  --shadow-btn: 0 6px 18px rgba(236, 72, 153, 0.35);
+  --shadow-hover: 0 8px 24px rgba(219, 39, 119, 0.45);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -35,10 +47,10 @@ body {
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
-  padding: 32px 16px;
+  padding: 36px 16px;
 }
 
-/* Background luminous orbs */
+/* Background luminous orbs en Rosa y Violeta */
 .background-decorations {
   position: fixed;
   inset: 0;
@@ -50,24 +62,24 @@ body {
 .circle {
   position: absolute;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.25;
+  filter: blur(110px);
+  opacity: 0.35;
 }
 
 .circle-1 {
-  width: 450px;
-  height: 450px;
-  background: #6366f1;
-  top: -100px;
-  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: #a855f7; /* Violeta radiante */
+  top: -120px;
+  left: -120px;
 }
 
 .circle-2 {
-  width: 500px;
-  height: 500px;
-  background: #06b6d4;
-  bottom: -150px;
-  right: -150px;
+  width: 520px;
+  height: 520px;
+  background: #ec4899; /* Rosa fucsia */
+  bottom: -160px;
+  right: -160px;
 }
 
 /* Container */
@@ -83,37 +95,39 @@ body {
 /* Header */
 .survey-header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 30px;
   color: #ffffff;
 }
 
 .badge {
   display: inline-block;
-  background: rgba(99, 102, 241, 0.2);
-  border: 1px solid rgba(165, 180, 252, 0.3);
-  color: #c7d2fe;
+  background: rgba(236, 72, 153, 0.16);
+  border: 1px solid rgba(244, 114, 182, 0.35);
+  color: #fbcfe8;
   font-size: 0.85rem;
   font-weight: 600;
-  padding: 6px 14px;
+  padding: 6px 16px;
   border-radius: 9999px;
   margin-bottom: 14px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.15);
 }
 
 .survey-header h1 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.1rem;
+  font-weight: 800;
   letter-spacing: -0.025em;
   margin-bottom: 10px;
-  background: linear-gradient(to right, #ffffff, #cbd5e1);
+  background: linear-gradient(135deg, #ffffff 25%, #f472b6 65%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .survey-header p {
-  color: #94a3b8;
+  color: #d8b4fe;
   font-size: 0.975rem;
   line-height: 1.5;
+  opacity: 0.9;
 }
 
 /* Survey Form Card */
@@ -121,12 +135,13 @@ body {
   background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  padding: 36px 32px;
+  padding: 38px 34px;
   display: flex;
   flex-direction: column;
   gap: 28px;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(244, 114, 182, 0.25);
+  position: relative;
 }
 
 /* Form Groups & Fields */
@@ -143,17 +158,17 @@ body {
   align-items: baseline;
   gap: 6px;
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-main);
   margin-bottom: 4px;
 }
 
 .field-title {
-  color: #0f172a;
+  color: #1e1b4b;
 }
 
 .required {
-  color: var(--error);
+  color: var(--pink-primary);
   font-weight: 700;
 }
 
@@ -177,33 +192,33 @@ textarea {
   font-family: inherit;
   font-size: 0.95rem;
   color: var(--text-main);
-  background-color: #f8fafc;
+  background-color: #faf7fd;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 12px 14px;
+  padding: 13px 15px;
   transition: var(--transition);
   outline: none;
 }
 
 .input-wrapper input:hover,
 textarea:hover {
-  border-color: #cbd5e1;
+  border-color: #f472b6;
   background-color: #ffffff;
 }
 
 .input-wrapper input:focus,
 textarea:focus {
   background-color: #ffffff;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  border-color: var(--violet-primary);
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.16);
 }
 
 textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 95px;
 }
 
-/* Scale 1-5 Radio Buttons */
+/* Scale 1-5 Radio Buttons (Rosa & Violeta) */
 .scale-options {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -228,31 +243,31 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 52px;
-  background-color: #f8fafc;
+  height: 54px;
+  background-color: #faf7fd;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-md);
   font-size: 1.15rem;
   font-weight: 700;
-  color: #475569;
+  color: #581c87;
   transition: var(--transition);
   user-select: none;
 }
 
 .scale-item:hover .scale-btn {
-  background-color: var(--primary-light);
-  border-color: #a5b4fc;
-  color: var(--primary);
+  background-color: var(--pink-light);
+  border-color: #f472b6;
+  color: var(--pink-primary);
   transform: translateY(-2px);
 }
 
 .scale-item input[type="radio"]:focus-visible + .scale-btn {
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.25);
 }
 
 .scale-item input[type="radio"]:checked + .scale-btn {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--accent-gradient);
+  border-color: transparent;
   color: #ffffff;
   box-shadow: var(--shadow-btn);
   transform: translateY(-2px);
@@ -262,8 +277,8 @@ textarea {
   display: flex;
   justify-content: space-between;
   font-size: 0.8rem;
-  color: var(--text-muted);
-  font-weight: 500;
+  color: #7e22ce;
+  font-weight: 600;
   padding: 0 4px;
 }
 
@@ -300,8 +315,8 @@ textarea {
 
 .alert-error {
   background-color: var(--error-bg);
-  border: 1px solid #fca5a5;
-  color: #991b1b;
+  border: 1px solid #fecdd3;
+  color: #9f1239;
 }
 
 .hidden {
@@ -312,7 +327,7 @@ textarea {
 .btn-spinner {
   width: 18px;
   height: 18px;
-  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
   border-top-color: #ffffff;
   animation: spin 0.75s linear infinite;
@@ -336,15 +351,15 @@ textarea {
   align-items: center;
   gap: 5px;
   font-size: 0.825rem;
-  color: #065f46;
-  background: #d1fae5;
-  border: 1px solid #a7f3d0;
+  color: #831843;
+  background: #fce7f3;
+  border: 1px solid #fbcfe8;
   padding: 4px 12px;
   border-radius: 9999px;
   font-weight: 600;
 }
 
-/* Buttons */
+/* Buttons con gradiente Rosa y Violeta */
 .form-actions {
   margin-top: 10px;
 }
@@ -355,25 +370,25 @@ textarea {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 14px 24px;
+  padding: 15px 24px;
   border: none;
   border-radius: var(--radius-md);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 700;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--accent-gradient);
   color: #ffffff;
   box-shadow: var(--shadow-btn);
 }
 
 .btn-primary:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.45);
+  background: var(--accent-gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .btn-primary:active {
@@ -381,21 +396,21 @@ textarea {
 }
 
 .btn-secondary {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #cbd5e1;
+  background: #faf5ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
 }
 
 .btn-secondary:hover {
-  background: #e2e8f0;
+  background: #f3e8ff;
 }
 
 /* Modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(6px);
+  background: rgba(24, 9, 42, 0.75);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -414,9 +429,10 @@ textarea {
   max-width: 520px;
   width: 100%;
   border-radius: var(--radius-lg);
-  padding: 32px;
+  padding: 34px;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 30px 60px -12px rgba(41, 10, 56, 0.45);
+  border: 1px solid rgba(236, 72, 153, 0.25);
   animation: modalEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -437,21 +453,21 @@ textarea {
 }
 
 .modal-card h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1e1b4b;
   margin-bottom: 8px;
 }
 
 .modal-card p {
-  color: #64748b;
+  color: #6b647d;
   font-size: 0.95rem;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .summary-box {
-  background-color: #f8fafc;
-  border: 1px solid var(--border-color);
+  background-color: #faf7fd;
+  border: 1px solid var(--violet-border);
   border-radius: var(--radius-md);
   padding: 16px;
   text-align: left;
@@ -462,8 +478,8 @@ textarea {
 .summary-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 9px 0;
+  border-bottom: 1px solid #f3e8ff;
 }
 
 .summary-row:last-child {
@@ -472,11 +488,11 @@ textarea {
 
 .summary-label {
   font-weight: 600;
-  color: #475569;
+  color: #581c87;
 }
 
 .summary-val {
-  color: #0f172a;
+  color: #1f1d2b;
   font-weight: 500;
   text-align: right;
   max-width: 60%;
@@ -492,8 +508,9 @@ textarea {
 .footer {
   text-align: center;
   margin-top: 36px;
-  color: #94a3b8;
+  color: #d8b4fe;
   font-size: 0.85rem;
+  opacity: 0.85;
 }
 
 /* Responsive adjustments */
@@ -508,11 +525,11 @@ textarea {
   }
 
   .survey-header h1 {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
   }
 
   .scale-btn {
-    height: 46px;
+    height: 48px;
     font-size: 1.05rem;
   }
 
@@ -524,4 +541,3 @@ textarea {
     flex-direction: column;
   }
 }
-
