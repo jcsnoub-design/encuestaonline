@@ -1,0 +1,19 @@
+{
+  "name": "proyecto-encuesta-antigravity",
+  "version": "1.0.0",
+  "description": "Sistema seguro para encuesta de estudiantes del curso Antigravity",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "survey",
+    "antigravity",
+    "airtable",
+    "n8n",
+    "security"
+  ],
+  "author": "",
+  "license": "ISC"
+}

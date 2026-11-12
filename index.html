@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self';">
+  <title>Encuesta de Satisfacción - Curso Antigravity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-decorations" aria-hidden="true">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+  </div>
+
+  <main class="container">
+    <header class="survey-header">
+      <div class="badge">🚀 Feedback del Alumno</div>
+      <h1>Evaluación del Curso Antigravity</h1>
+      <p>Tu opinión es fundamental para ayudarnos a mejorar continuamente la experiencia de aprendizaje.</p>
+    </header>
+
+    <form id="survey-form" class="survey-card" novalidate>
+      <!-- Campo Honeypot oculto para atrapar bots y spammers -->
+      <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+        <label for="_hp_website">No rellenar</label>
+        <input type="text" name="_hp_website" id="_hp_website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <!-- Pregunta 1: ID Estudiante -->
+      <section class="form-group">
+        <label for="id_estudiante" class="field-label">
+          <span class="field-title">1. Identificador del Estudiante</span>
+          <span class="required" title="Campo obligatorio">*</span>
+        </label>
+        <p class="field-desc">Ingresa tu código o correo institucional de alumno.</p>
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            id="id_estudiante" 
+            name="id_estudiante" 
+            placeholder="Ejemplo: EST-2024-001 o usuario@universidad.edu" 
+            required 
+            maxlength="60"
+            autocomplete="off"
+          />
+        </div>
+        <span class="error-message" id="error-id_estudiante"></span>
+      </section>
+
+      <!-- Pregunta 2: Nivel de Satisfacción -->
+      <fieldset class="form-group scale-group" id="group-nivel_satisfaccion">
+        <legend class="field-label">
+          <span class="field-title">2. Nivel de Satisfacción General</span>
+          <span class="required" title="Campo obligatorio">*</span>
+        </legend>
+        <p class="field-desc">¿Qué tan satisfecho estás con el curso en general?</p>
+        
+        <div class="scale-options" role="radiogroup" aria-labelledby="group-nivel_satisfaccion">
+          <label class="scale-item">
+            <input type="radio" name="nivel_satisfaccion" value="1" required>
+            <span class="scale-btn">1</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="nivel_satisfaccion" value="2">
+            <span class="scale-btn">2</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="nivel_satisfaccion" value="3">
+            <span class="scale-btn">3</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="nivel_satisfaccion" value="4">
+            <span class="scale-btn">4</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="nivel_satisfaccion" value="5">
+            <span class="scale-btn">5</span>
+          </label>
+        </div>
+        <div class="scale-labels">
+          <span>1 = Muy insatisfecho</span>
+          <span>5 = Muy satisfecho</span>
+        </div>
+        <span class="error-message" id="error-nivel_satisfaccion"></span>
+      </fieldset>
+
+      <!-- Pregunta 3: Claridad del Contenido -->
+      <fieldset class="form-group scale-group" id="group-claridad_contenido">
+        <legend class="field-label">
+          <span class="field-title">3. Claridad del Contenido</span>
+          <span class="required" title="Campo obligatorio">*</span>
+        </legend>
+        <p class="field-desc">¿Cómo evalúas la claridad con la que se explicaron los temas y conceptos?</p>
+        
+        <div class="scale-options" role="radiogroup" aria-labelledby="group-claridad_contenido">
+          <label class="scale-item">
+            <input type="radio" name="claridad_contenido" value="1" required>
+            <span class="scale-btn">1</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="claridad_contenido" value="2">
+            <span class="scale-btn">2</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="claridad_contenido" value="3">
+            <span class="scale-btn">3</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="claridad_contenido" value="4">
+            <span class="scale-btn">4</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="claridad_contenido" value="5">
+            <span class="scale-btn">5</span>
+          </label>
+        </div>
+        <div class="scale-labels">
+          <span>1 = Muy poco claro</span>
+          <span>5 = Muy claro</span>
+        </div>
+        <span class="error-message" id="error-claridad_contenido"></span>
+      </fieldset>
+
+      <!-- Pregunta 4: Aplicabilidad Práctica -->
+      <fieldset class="form-group scale-group" id="group-aplicabilidad_practica">
+        <legend class="field-label">
+          <span class="field-title">4. Aplicabilidad Práctica</span>
+          <span class="required" title="Campo obligatorio">*</span>
+        </legend>
+        <p class="field-desc">¿Qué tan aplicables consideras los conocimientos y herramientas aprendidas para tus proyectos reales?</p>
+        
+        <div class="scale-options" role="radiogroup" aria-labelledby="group-aplicabilidad_practica">
+          <label class="scale-item">
+            <input type="radio" name="aplicabilidad_practica" value="1" required>
+            <span class="scale-btn">1</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="aplicabilidad_practica" value="2">
+            <span class="scale-btn">2</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="aplicabilidad_practica" value="3">
+            <span class="scale-btn">3</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="aplicabilidad_practica" value="4">
+            <span class="scale-btn">4</span>
+          </label>
+          <label class="scale-item">
+            <input type="radio" name="aplicabilidad_practica" value="5">
+            <span class="scale-btn">5</span>
+          </label>
+        </div>
+        <div class="scale-labels">
+          <span>1 = Nada aplicable</span>
+          <span>5 = Muy aplicable</span>
+        </div>
+        <span class="error-message" id="error-aplicabilidad_practica"></span>
+      </fieldset>
+
+      <!-- Pregunta 5: Comentarios Adicionales -->
+      <section class="form-group">
+        <label for="comentarios_adicionales" class="field-label">
+          <span class="field-title">5. Comentarios Adicionales</span>
+          <span class="optional">(Opcional)</span>
+        </label>
+        <p class="field-desc">Comparte cualquier sugerencia, felicitación o aspecto a mejorar.</p>
+        <textarea 
+          id="comentarios_adicionales" 
+          name="comentarios_adicionales" 
+          rows="4" 
+          maxlength="1500"
+          placeholder="Escribe tus comentarios aquí..."
+        ></textarea>
+      </section>
+
+      <!-- Alerta de estado si ocurre un error de conexión -->
+      <div id="form-alert" class="alert-box alert-error hidden" role="alert"></div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="submit-btn">
+          <span class="btn-spinner hidden" id="btn-spinner" aria-hidden="true"></span>
+          <span id="btn-text">Enviar Encuesta</span>
+          <svg class="btn-icon" id="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </form>
+
+    <!-- Modal de confirmación de éxito -->
+    <div id="success-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <div class="modal-icon">🎉</div>
+        <h2 id="modal-title">¡Gracias por tu respuesta!</h2>
+        <p>Tu opinión sobre el curso de Antigravity ha sido registrada exitosamente en <strong>Airtable</strong>.</p>
+        
+        <div class="summary-box" id="response-summary">
+          <!-- Se completa mediante JavaScript -->
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-primary" id="close-modal-btn">Nueva Respuesta</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Curso de Antigravity • Encuesta de retroalimentación estudiantil</p>
+  </footer>
+
+  <script src="script.js?v=2.3"></script>
+</body>
+</html>
+
