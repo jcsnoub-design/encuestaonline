@@ -12,9 +12,8 @@ function loadEnv() {
       if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
         const [key, ...rest] = trimmed.split('=');
         const val = rest.join('=').trim().replace(/^["']|["']$/g, '');
-        if (!process.env[key.trim()]) {
-          process.env[key.trim()] = val;
-        }
+        // Actualizar siempre con el valor más reciente del archivo .env
+        process.env[key.trim()] = val;
       }
     });
   }
@@ -167,7 +166,8 @@ const server = http.createServer(async (req, res) => {
 
         const cleanComentarios = sanitizeString(comentarios_adicionales, 1500);
 
-        // C. Obtener credenciales desde variables de entorno seguras
+        // C. Obtener credenciales desde variables de entorno seguras (recarga dinámica)
+        loadEnv();
         const {
           AIRTABLE_TOKEN,
           AIRTABLE_BASE_ID,
@@ -185,7 +185,7 @@ const server = http.createServer(async (req, res) => {
           res.writeHead(500, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({
             success: false,
-            error: 'Error de configuración interna en el servidor.'
+            error: 'Error de configuración interna en el servidor: faltan variables en .env.'
           }));
         }
 
@@ -212,11 +212,24 @@ const server = http.createServer(async (req, res) => {
 
         if (!airtableRes.ok) {
           const errDetail = await airtableRes.text();
-          console.error('❌ Error de Airtable API:', airtableRes.status, errDetail);
-          res.writeHead(502, { 'Content-Type': 'application/json' });
+          console.error(`❌ Error de Airtable API (${airtableRes.status}):`, errDetail);
+
+          let errorMsg = 'No se pudo guardar la respuesta en Airtable.';
+          if (airtableRes.status === 401) {
+            errorMsg = 'Error de autenticación: El token de Airtable es inválido o ha sido revocado. Por favor ingresa un token válido en AIRTABLE_TOKEN del archivo .env.';
+          } else {
+            try {
+              const parsed = JSON.parse(errDetail);
+              if (parsed.error && parsed.error.message) {
+                errorMsg = `Error de Airtable: ${parsed.error.message}`;
+              }
+            } catch (e) {}
+          }
+
+          res.writeHead(airtableRes.status === 401 ? 401 : 502, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({
             success: false,
-            error: 'No se pudo guardar la respuesta en Airtable.'
+            error: errorMsg
           }));
         }
 
