@@ -340,7 +340,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 // Iniciar servidor
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`=======================================================`);
   console.log(`🛡️  SERVIDOR SEGURO ACTIVO: http://localhost:${PORT}`);
   console.log(`🔒  Token de Airtable protegido en servidor (.env)`);
