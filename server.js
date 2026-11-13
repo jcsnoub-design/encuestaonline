@@ -48,13 +48,22 @@ setInterval(() => {
   }
 }, 30 * 60 * 1000);
 
-// 3. Función auxiliar para sanitizar cadenas (prevenir inyecciones XSS)
+// 3. Función auxiliar para obtener la IP real del cliente (compatible con proxies de Render y Cloudflare)
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+  return req.headers['cf-connecting-ip'] || req.socket.remoteAddress || 'unknown';
+}
+
+// 4. Función auxiliar para sanitizar cadenas (prevenir inyecciones XSS)
 function sanitizeString(str, maxLength = 500) {
   if (typeof str !== 'string') return '';
   return str
     .slice(0, maxLength)
     .trim()
-    .replace(/[<>]/g, ''); // Remueve caracteres de etiquetas HTML
+    .replace(/[<>'"`;\\]/g, ''); // Remueve caracteres peligrosos para scripts e inyección
 }
 
 // Tipos MIME para los archivos estáticos
@@ -69,9 +78,9 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-// 4. Crear el Servidor HTTP Seguro
+// 5. Crear el Servidor HTTP Seguro
 const server = http.createServer(async (req, res) => {
-  const clientIp = req.socket.remoteAddress || 'unknown';
+  const clientIp = getClientIp(req);
 
   // Inyección de Cabeceras de Seguridad (Protección contra Clickjacking, MIME-sniffing, XSS)
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -143,11 +152,21 @@ const server = http.createServer(async (req, res) => {
 
         // B. Validación Estricta en el Servidor
         const cleanId = sanitizeString(id_estudiante, 60);
-        if (!cleanId) {
+        if (!cleanId || cleanId.length < 2) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({
             success: false,
-            error: 'El identificador del estudiante es obligatorio (máximo 60 caracteres).'
+            error: 'El identificador del estudiante debe tener entre 2 y 60 caracteres.'
+          }));
+        }
+
+        // Permitir solo caracteres alfanuméricos y separadores comunes (anti-inyección)
+        const idRegex = /^[a-zA-Z0-9_\-\.\@\s]{2,60}$/;
+        if (!idRegex.test(cleanId)) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({
+            success: false,
+            error: 'El identificador contiene caracteres no permitidos.'
           }));
         }
 
@@ -291,45 +310,41 @@ const server = http.createServer(async (req, res) => {
   }
 
   // -------------------------------------------------------------
-  // SERVIR ARCHIVOS ESTÁTICOS (index.html, style.css, script.js)
+  // SERVIR ARCHIVOS ESTÁTICOS (WHITELIST ESTRICTA)
+  // Únicamente se permite el acceso a los archivos públicos del frontend
+  // Bloquea por completo server.js, package.json, .env, .git, etc.
   // -------------------------------------------------------------
   if (req.method === 'GET') {
-    let filePath = pathname === '/' ? '/index.html' : pathname;
-    const safePath = path.normalize(filePath).replace(/^(\.\.[\/\\])+/, '');
-    const fullPath = path.join(__dirname, safePath);
+    const cleanPath = pathname.split('?')[0].toLowerCase();
 
-    // Evitar salir del directorio base (Path Traversal Protection)
-    if (!fullPath.startsWith(__dirname)) {
-      res.writeHead(403, { 'Content-Type': 'text/plain' });
-      return res.end('403 Prohibido');
+    // Whitelist exacta de rutas públicas permitidas
+    const PUBLIC_FILES = {
+      '/': { file: 'index.html', type: 'text/html; charset=UTF-8' },
+      '/index.html': { file: 'index.html', type: 'text/html; charset=UTF-8' },
+      '/style.css': { file: 'style.css', type: 'text/css; charset=UTF-8' },
+      '/script.js': { file: 'script.js', type: 'application/javascript; charset=UTF-8' }
+    };
+
+    if (cleanPath === '/favicon.ico') {
+      res.writeHead(204);
+      return res.end();
     }
 
-    fs.stat(fullPath, (err, stats) => {
-      if (err || !stats.isFile()) {
-        // Fallback a index.html si no se encuentra
-        const indexPath = path.join(__dirname, 'index.html');
-        fs.readFile(indexPath, (indexErr, indexData) => {
-          if (indexErr) {
-            res.writeHead(404, { 'Content-Type': 'text/plain' });
-            return res.end('404 No encontrado');
-          }
-          res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' });
-          res.end(indexData);
-        });
-        return;
+    const route = PUBLIC_FILES[cleanPath];
+    if (!route) {
+      // Bloquear acceso a archivos sensibles del servidor (.env, server.js, package.json, etc.)
+      res.writeHead(404, { 'Content-Type': 'text/plain; charset=UTF-8' });
+      return res.end('404 Recurso no encontrado');
+    }
+
+    const targetFile = path.join(__dirname, route.file);
+    fs.readFile(targetFile, (err, content) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain; charset=UTF-8' });
+        return res.end('500 Error de lectura');
       }
-
-      const ext = path.extname(fullPath).toLowerCase();
-      const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
-      fs.readFile(fullPath, (readErr, content) => {
-        if (readErr) {
-          res.writeHead(500, { 'Content-Type': 'text/plain' });
-          return res.end('500 Error de lectura');
-        }
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.end(content);
-      });
+      res.writeHead(200, { 'Content-Type': route.type });
+      res.end(content);
     });
     return;
   }

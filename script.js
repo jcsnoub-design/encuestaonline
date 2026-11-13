@@ -190,9 +190,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, '&#039;');
   }
 
+  let isProcessingSubmission = false;
+
   // Manejar envío
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (isProcessingSubmission) return;
     hideAlert();
 
     const formData = new FormData(form);
@@ -214,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       _hp_website: formData.get('_hp_website') || '' // Campo trampa anti-spam
     };
 
+    isProcessingSubmission = true;
     setSubmittingState(true);
 
     try {
@@ -228,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAlert(`Hubo un problema al enviar la encuesta: ${error.message}`);
     } finally {
       setSubmittingState(false);
+      isProcessingSubmission = false;
     }
   });
 
